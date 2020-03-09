@@ -1,0 +1,2 @@
+class RaffleType < ApplicationRecord
+end
