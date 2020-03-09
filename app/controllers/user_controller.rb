@@ -5,7 +5,16 @@ class UserController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.save
+    respond_to do |format|
+      if @user.save
+        type_count = User.where(raffle_types_id: @user.raffle_types_id).count
+        format.html { redirect_to new_user_path, notice: @user.odds_msg(type_count) }
+      else
+        @user.errors.full_messages.each do |msg|
+          format.html { redirect_to new_user_path, alert: "#{msg}"}
+        end
+      end
+    end
   end
 
   private
